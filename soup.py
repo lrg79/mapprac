@@ -4,22 +4,40 @@ soup = BeautifulSoup(open("verizon.html"),from_encoding="utf-8")
 
 print("'" + str(soup.encode("ascii")) + "'")
 
-accepted = []
-country = []
+arr = []
 
-prefPrice = soup.findAll('td', {'class': 'tr0 td22'})
-countries = soup.findAll('td', {'class': 'tr0 td18'})
+class prefPrice:
 
-accepted.extend(prefPrice)
-country.extend(countries)
+   def __init__(self, countryName, yesNo):
+      self.countryName = countryName
+      self.yesNo = yesNo
 
-prefPrice = soup.findAll('td', {'class': 'tr0 td22'})
-countries = soup.findAll('td', {'class': 'tr0 td18'})
+print "*******************"
 
-accepted.extend(prefPrice)
-country.extend(countries)
+for tr in soup.findAll('tr'):
+	print(tr)
+	yesNo = "None"
+	countryName = "None"
+	yesNo = tr.find('td', {'class': 'tr0 td22'})
+	yesNo = str(yesNo)
+	
+	if "Yes" in yesNo:
+		yesNo = "yes"
+	elif "No" in yesNo:
+		yesNo = "no"
+	else:
+		yesNo = "None"
 
-print accepted
-print len(accepted)
-print country
-print len(country)
+	countryName = tr.find('td', {'class': 'tr0 td18'})
+	str(countryName)
+
+	if str(countryName) != "None":
+		countryName = countryName.find('p')
+
+	if (str(countryName) != "None") and yesNo != "None":
+		arr.append(prefPrice(countryName,yesNo))
+
+	print yesNo
+	print countryName
+
+print len(arr)
