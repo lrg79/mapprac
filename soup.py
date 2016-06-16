@@ -1,74 +1,48 @@
 from bs4 import BeautifulSoup
 import json
+import sys
 
-soup = BeautifulSoup(open("verizon.html"),from_encoding="utf-8")
+class readPDF: 
+	response = [] #this stores the json
+	reload(sys)
+	sys.setdefaultencoding('utf-8')
+	soup = BeautifulSoup(open("verizon.html"),from_encoding="utf-8")
 
-#print("'" + str(soup.encode("ascii")) + "'")
+	def readTR(self, soup, num):
 
-arr = []
-response = [] #this stores the json
-
-class prefPrice:
-
-   def __init__(self, countryName, yesNo):
-      self.countryName = countryName
-      self.yesNo = yesNo
-
-print "*******************"
-
-for tr in soup.findAll('tr'):
-	#print(tr)
-	yesNo = "None"
-	countryName = "None"
-	yesNo = tr.find('td', {'class': 'tr0 td22'})
-	yesNo = str(yesNo)
-	
-	if "Yes" in yesNo:
-		yesNo = "yes"
-	elif "No" in yesNo:
-		yesNo = "no"
-	else:
-		yesNo = "None"
-
-	countryName = tr.find('td', {'class': 'tr0 td18'})
-	str(countryName)
-
-	if str(countryName) != "None":
-		countryName = countryName.find('p')
-
-	if (str(countryName) != "None") and yesNo != "None":
-		arr.append(prefPrice(countryName,yesNo))
-		for child in countryName:
-    			countryName = child
-		response.append({'country': str(countryName), 'offered': yesNo})
-	else:
-		yesNo = tr.find('td', {'class': 'tr2 td22'})
-		yesNo = str(yesNo)
-	
-		if "Yes" in yesNo:
-			yesNo = "yes"
-		elif "No" in yesNo:
-			yesNo = "no"
-		else:
+		for tr in soup.findAll('tr'):
+			#print(tr)
 			yesNo = "None"
+			countryName = "None"
+			classYesNo = ""
+			classCountryCol = ""
+			classYesNoCol = 'tr' + str(num) + ' ' + 'td22'
+			yesNo = tr.find('td', {'class': classYesNo})
+			yesNo = str(yesNo)
+			
+			if "Yes" in yesNo:
+				yesNo = "yes"
+			elif "No" in yesNo:
+				yesNo = "no"
+			else:
+				yesNo = "None"
+			classCountryCol = 'tr' + str(num) + ' ' + 'td18'
+			countryName = tr.find('td', {'class': classCountryCol})
+			str(countryName)
 
-		countryName = tr.find('td', {'class': 'tr2 td18'})
-		str(countryName)
+			if str(countryName) != "None":
+				countryName = countryName.find('p')
 
-		if str(countryName) != "None":
-			ountryName = countryName.find('p')
+			if (str(countryName) != "None") and yesNo != "None":
+				for child in countryName:
+		    			countryName = child
+				self.response.append({'country': str(countryName), 'offered': yesNo})
+
+	def printJSON(self):
+		print(len(readPDF.response))
+		print json.dumps(readPDF.response)
 		
-		if (str(countryName) != "None") and yesNo != "None":
-			arr.append(prefPrice(countryName,yesNo))
-			for child in countryName:
-    				countryName = child
-			response.append({'country': str(countryName), 'offered': yesNo})
-
-print len(arr)
-print json.dumps(response)
-x = 0 #view the array of obejcts we built
-while x < len(arr):
-	prefPrice= arr[x]
-	print prefPrice.countryName
-	print prefPrice.yesNo
-	x+=1
+read = readPDF()
+read.readTR(readPDF.soup,0)
+read.readTR(readPDF.soup, 2)
+read.printJSON()
