@@ -26,17 +26,40 @@ class readPDF:
 				yesNo = "no"
 			else:
 				yesNo = "None"
-			classCountryCol = 'tr' + str(num) + ' ' + 'td18'
-			countryName = tr.find('td', {'class': classCountryCol})
+			countryName = tr.find('td', {'class': 'tr' + str(num) + ' ' + 'td18'})
 			str(countryName)
 
 			if str(countryName) != "None":
 				countryName = countryName.find('p')
 
+			asGo = ""
+
+			for tr19 in tr.findAll('td', {'class': 'tr' + str(num) + ' ' + 'td19'}):
+				if str(tr19.find('p', 'p20 ft1')) != "None":
+					asGo = (tr19.find('p', 'p20 ft1')) 
+
+				elif str(tr19.find('p', 'p9 ft1')) != "None":
+					asGo = (tr19.find('p', 'p9 ft1'))
+
+				elif str(tr19.find('p', 'p20 ft4')) != "None":
+					asGo = (tr19.find('p', 'p20 ft4'))
+
+				elif str(tr19.find('p', 'p7 ft4')) != "None":
+					asGo = (tr19.find('p', 'p7 ft4'))
+				else:
+					asGo = "None"
+
+			if(str(asGo) != "None"):
+				for child in asGo:
+						asGo = child
+
+			asGo = str(asGo)
+			print asGo
+
 			if (str(countryName) != "None") and yesNo != "None":
 				for child in countryName:
 		    			countryName = child
-				self.response.append({'country': str(countryName), 'offered': yesNo})
+				self.response.append({'country': str(countryName), 'offered': yesNo, 'asGo': asGo})
 
 	def printJSON(self):
 		print(len(readPDF.response))
