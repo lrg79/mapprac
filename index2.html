@@ -2,16 +2,33 @@
 <html>
 <head>
 	<meta charset = 'utf 8'>
+	<meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4" />
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<style>
     body { margin:0; padding:0; }
     #mapid { position:absolute; top:0; bottom:0; width:100%; }
+
+		.info {
+		    padding: 6px 8px;
+		    font: 14px/16px Arial, Helvetica, sans-serif;
+		    background: white;
+		    background: rgba(255,255,255,0.8);
+		    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+		    border-radius: 5px;
+		}
+		.info h4 {
+		    margin: 0 0 5px;
+		    color: #777;
+		}
+		info.addTo(mymap);
    </style>
 
 </head>
 <body>
 	<div id = 'mapid'></div>
+	<div id = 'tableid'></div>
 	<script>
 		var geojsonFeature = {"type":"FeatureCollection","features":[
 {"type":"Feature","id":"AFG","properties":{"name":"Afghanistan"},"geometry":{"type":"Polygon","coordinates":[[[61.210817,35.650072],[62.230651,35.270664],[62.984662,35.404041],[63.193538,35.857166],[63.982896,36.007957],[64.546479,36.312073],[64.746105,37.111818],[65.588948,37.305217],[65.745631,37.661164],[66.217385,37.39379],[66.518607,37.362784],[67.075782,37.356144],[67.83,37.144994],[68.135562,37.023115],[68.859446,37.344336],[69.196273,37.151144],[69.518785,37.608997],[70.116578,37.588223],[70.270574,37.735165],[70.376304,38.138396],[70.806821,38.486282],[71.348131,38.258905],[71.239404,37.953265],[71.541918,37.905774],[71.448693,37.065645],[71.844638,36.738171],[72.193041,36.948288],[72.63689,37.047558],[73.260056,37.495257],[73.948696,37.421566],[74.980002,37.41999],[75.158028,37.133031],[74.575893,37.020841],[74.067552,36.836176],[72.920025,36.720007],[71.846292,36.509942],[71.262348,36.074388],[71.498768,35.650563],[71.613076,35.153203],[71.115019,34.733126],[71.156773,34.348911],[70.881803,33.988856],[69.930543,34.02012],[70.323594,33.358533],[69.687147,33.105499],[69.262522,32.501944],[69.317764,31.901412],[68.926677,31.620189],[68.556932,31.71331],[67.792689,31.58293],[67.683394,31.303154],[66.938891,31.304911],[66.381458,30.738899],[66.346473,29.887943],[65.046862,29.472181],[64.350419,29.560031],[64.148002,29.340819],[63.550261,29.468331],[62.549857,29.318572],[60.874248,29.829239],[61.781222,30.73585],[61.699314,31.379506],[60.941945,31.548075],[60.863655,32.18292],[60.536078,32.981269],[60.9637,33.528832],[60.52843,33.676446],[60.803193,34.404102],[61.210817,35.650072]]]}},
@@ -275,13 +292,15 @@
 {"type":"Feature","id":"ZWE","properties":{"name":"Zimbabwe"},"geometry":{"type":"Polygon","coordinates":[[[31.191409,-22.25151],[30.659865,-22.151567],[30.322883,-22.271612],[29.839037,-22.102216],[29.432188,-22.091313],[28.794656,-21.639454],[28.02137,-21.485975],[27.727228,-20.851802],[27.724747,-20.499059],[27.296505,-20.39152],[26.164791,-19.293086],[25.850391,-18.714413],[25.649163,-18.536026],[25.264226,-17.73654],[26.381935,-17.846042],[26.706773,-17.961229],[27.044427,-17.938026],[27.598243,-17.290831],[28.467906,-16.4684],[28.825869,-16.389749],[28.947463,-16.043051],[29.516834,-15.644678],[30.274256,-15.507787],[30.338955,-15.880839],[31.173064,-15.860944],[31.636498,-16.07199],[31.852041,-16.319417],[32.328239,-16.392074],[32.847639,-16.713398],[32.849861,-17.979057],[32.654886,-18.67209],[32.611994,-19.419383],[32.772708,-19.715592],[32.659743,-20.30429],[32.508693,-20.395292],[32.244988,-21.116489],[31.191409,-22.25151]]]}}
 
 ]};
+var accepted = [{"country": "Aland Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Albania", "offered": "yes", "asGo": "$2.05"}, {"country": "Algeria", "offered": "no", "asGo": "$2.05"}, {"country": "Andorra", "offered": "yes", "asGo": "$2.05"}, {"country": "Angola", "offered": "no", "asGo": "$2.05"}, {"country": "Armenia", "offered": "yes", "asGo": "$2.05"}, {"country": "Aruba", "offered": "yes", "asGo": "$2.05"}, {"country": "Australia", "offered": "yes", "asGo": "$2.05"}, {"country": "Austria", "offered": "yes", "asGo": "$2.05"}, {"country": "Azerbaijan", "offered": "yes", "asGo": "$2.05"}, {"country": "Bahamas", "offered": "yes", "asGo": "$2.05"}, {"country": "Belarus", "offered": "yes", "asGo": "$2.05"}, {"country": "Belgium", "offered": "yes", "asGo": "$2.05"}, {"country": "Belize", "offered": "yes", "asGo": "$2.05"}, {"country": "Benin", "offered": "no", "asGo": "$2.05"}, {"country": "Bermuda", "offered": "yes", "asGo": "$2.05"}, {"country": "Bhutan", "offered": "no", "asGo": "$2.05"}, {"country": "Brazil", "offered": "yes", "asGo": "$2.05"}, {"country": "Brunei", "offered": "no", "asGo": "$2.05"}, {"country": "Bulgaria", "offered": "yes", "asGo": "$2.05"}, {"country": "Burkina Faso", "offered": "no", "asGo": "$2.05"}, {"country": "Cambodia", "offered": "no", "asGo": "$2.05"}, {"country": "Cape Verde Islands", "offered": "no", "asGo": "$2.05"}, {"country": "Cayman Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Central African Republic", "offered": "no", "asGo": "$2.05"}, {"country": "Chad", "offered": "no", "asGo": "$2.05"}, {"country": "Chile", "offered": "yes", "asGo": "$2.05"}, {"country": "Congo Republic of", "offered": "no", "asGo": "$2.05"}, {"country": "Cook Islands", "offered": "no", "asGo": "$2.05"}, {"country": "Costa Rica", "offered": "yes", "asGo": "$2.05"}, {"country": "Croatia", "offered": "yes", "asGo": "$2.05"}, {"country": "Cuba", "offered": "no", "asGo": "$2.05"}, {"country": "Dominica", "offered": "yes", "asGo": "$2.05"}, {"country": "Dominican Republic", "offered": "yes", "asGo": "$2.05"}, {"country": "East Timor", "offered": "no", "asGo": "$2.05"}, {"country": "Easter Island", "offered": "yes", "asGo": "$2.05"}, {"country": "Ecuador", "offered": "yes", "asGo": "$2.05"}, {"country": "Estonia", "offered": "yes", "asGo": "$2.05"}, {"country": "Faroe Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Fiji", "offered": "no", "asGo": "$2.05"}, {"country": "Gambia", "offered": "no", "asGo": "$2.05"}, {"country": "Georgia", "offered": "yes", "asGo": "$2.05"}, {"country": "Greenland", "offered": "yes", "asGo": "$2.05"}, {"country": "Grenada", "offered": "yes", "asGo": "$2.05"}, {"country": "Guadeloupe", "offered": "yes", "asGo": "$2.05"}, {"country": "Guam", "offered": "yes", "asGo": "$2.05"}, {"country": "Guatemala", "offered": "yes", "asGo": "$2.05"}, {"country": "Guernsey", "offered": "yes", "asGo": "$2.05"}, {"country": "Honduras", "offered": "yes", "asGo": "$2.05"}, {"country": "Hong Kong", "offered": "yes", "asGo": "$2.05"}, {"country": "Hungary", "offered": "yes", "asGo": "$2.05"}, {"country": "Iceland", "offered": "yes", "asGo": "$2.05"}, {"country": "India", "offered": "yes", "asGo": "$2.05"}, {"country": "Indonesia", "offered": "yes", "asGo": "$2.05"}, {"country": "Isle of Man", "offered": "yes", "asGo": "$2.05"}, {"country": "Israel", "offered": "yes", "asGo": "$2.05"}, {"country": "Italy", "offered": "yes", "asGo": "$2.05"}, {"country": "Ivory Coast", "offered": "no", "asGo": "$2.05"}, {"country": "Jamaica", "offered": "yes", "asGo": "$2.05"}, {"country": "Japan", "offered": "yes", "asGo": "$2.05"}, {"country": "Korea, Republic of", "offered": "yes", "asGo": "$2.05"}, {"country": "Kosovo", "offered": "no", "asGo": "$2.05"}, {"country": "Kuwait", "offered": "no", "asGo": "$2.05"}, {"country": "Kyrgyzstan", "offered": "yes", "asGo": "$2.05"}, {"country": "Lebanon", "offered": "no", "asGo": "$2.05"}, {"country": "Lesotho", "offered": "no", "asGo": "$2.05"}, {"country": "Liberia", "offered": "no", "asGo": "$2.05"}, {"country": "Libya", "offered": "no", "asGo": "$2.05"}, {"country": "Liechtenstein", "offered": "yes", "asGo": "$2.05"}, {"country": "Madeira and Azores", "offered": "yes", "asGo": "$2.05"}, {"country": "Malawi", "offered": "no", "asGo": "$2.05"}, {"country": "Malaysia", "offered": "yes", "asGo": "$2.05"}, {"country": "Maldives", "offered": "yes", "asGo": "$2.05"}, {"country": "Mali", "offered": "no", "asGo": "$2.05"}, {"country": "Mauritius", "offered": "no", "asGo": "$2.05"}, {"country": "Mayotte Island", "offered": "yes", "asGo": "$2.05"}, {"country": "Mexico", "offered": "yes", "asGo": "$2.05"}, {"country": "Moldova", "offered": "yes", "asGo": "$2.05"}, {"country": "Monaco", "offered": "yes", "asGo": "$2.05"}, {"country": "Myanmar", "offered": "yes", "asGo": "$2.05"}, {"country": "Namibia", "offered": "no", "asGo": "$2.05"}, {"country": "Nauru", "offered": "no", "asGo": "$2.05"}, {"country": "Nepal", "offered": "no", "asGo": "$2.05"}, {"country": "Netherlands", "offered": "yes", "asGo": "$2.05"}, {"country": "Nigeria", "offered": "no", "asGo": "$2.05"}, {"country": "Norfolk Island", "offered": "no", "asGo": "$2.05"}, {"country": "Northern Mariana Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Norway", "offered": "yes", "asGo": "$2.05"}, {"country": "Oman", "offered": "no", "asGo": "$2.05"}, {"country": "Pakistan", "offered": "no", "asGo": "$2.05"}, {"country": "Paraguay", "offered": "yes", "asGo": "$2.05"}, {"country": "Peru", "offered": "yes", "asGo": "$2.05"}, {"country": "Philippines", "offered": "yes", "asGo": "$2.05"}, {"country": "Poland", "offered": "yes", "asGo": "$2.05"}, {"country": "Portugal", "offered": "yes", "asGo": "$2.05"}, {"country": "Rwanda", "offered": "no", "asGo": "$2.05"}, {"country": "Saba", "offered": "yes", "asGo": "$2.05"}, {"country": "Saipan", "offered": "yes", "asGo": "$2.05"}, {"country": "Samoa", "offered": "yes", "asGo": "$2.05"}, {"country": "San Marino", "offered": "yes", "asGo": "$2.05"}, {"country": "Seychelles", "offered": "no", "asGo": "$2.05"}, {"country": "Sierra Leone", "offered": "no", "asGo": "$2.05"}, {"country": "Singapore", "offered": "yes", "asGo": "$2.05"}, {"country": "Slovakia", "offered": "yes", "asGo": "$2.05"}, {"country": "Slovenia", "offered": "yes", "asGo": "$2.05"}, {"country": "Sri Lanka", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Barthelemy", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Eustatius", "offered": "yes", "asGo": "$2.05"}, {"country": "St. John", "offered": "yes", "asGo": "Domestic"}, {"country": "St. Kitts and Nevis", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Lucia", "offered": "yes", "asGo": "$2.05"}, {"country": "Suriname", "offered": "yes", "asGo": "$2.05"}, {"country": "Svalbard", "offered": "yes", "asGo": "$2.05"}, {"country": "Swaziland", "offered": "no", "asGo": "$2.05"}, {"country": "Sweden", "offered": "yes", "asGo": "$2.05"}, {"country": "Switzerland", "offered": "yes", "asGo": "$2.05"}, {"country": "Togo", "offered": "no", "asGo": "$2.05"}, {"country": "Tonga Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Tortola", "offered": "yes", "asGo": "$2.05"}, {"country": "Trinidad & Tobago", "offered": "yes", "asGo": "$2.05"}, {"country": "Tunisia", "offered": "no", "asGo": "$2.05"}, {"country": "United Arab Emirates", "offered": "yes", "asGo": "$2.05"}, {"country": "United Kingdom", "offered": "yes", "asGo": "$2.05"}, {"country": "Uruguay", "offered": "yes", "asGo": "$2.05"}, {"country": "Uzbekistan", "offered": "yes", "asGo": "$2.05"}, {"country": "Vanuatu", "offered": "no", "asGo": "$2.05"}, {"country": "Virgin Islands, US", "offered": "yes", "asGo": "Domestic"}, {"country": "Wales", "offered": "yes", "asGo": "$2.05"}, {"country": "Western Sahara", "offered": "no", "asGo": "5"}, {"country": "Yemen", "offered": "no", "asGo": "5"}, {"country": "Zambia", "offered": "no", "asGo": "$2.05"}, {"country": "Zanzibar", "offered": "no", "asGo": "$2.05"}, {"country": "Zimbabwe", "offered": "no", "asGo": "$2.05"}, {"country": "Afghanistan", "offered": "no", "asGo": "$2.05"}, {"country": "Anguilla", "offered": "yes", "asGo": "$2.05"}, {"country": "Antigua", "offered": "yes", "asGo": "$2.05"}, {"country": "Argentina", "offered": "yes", "asGo": "$2.05"}, {"country": "Bahrain", "offered": "no", "asGo": "$2.05"}, {"country": "Bangladesh", "offered": "yes", "asGo": "$2.05"}, {"country": "Barbados", "offered": "yes", "asGo": "$2.05"}, {"country": "Barbuda", "offered": "yes", "asGo": "$2.05"}, {"country": "Bolivia", "offered": "yes", "asGo": "$2.05"}, {"country": "Bonaire", "offered": "yes", "asGo": "$2.05"}, {"country": "Bosnia and Herzegovina", "offered": "yes", "asGo": "$2.05"}, {"country": "Botswana", "offered": "no", "asGo": "$2.05"}, {"country": "Cameroon", "offered": "no", "asGo": "$2.05"}, {"country": "Canada", "offered": "yes", "asGo": "$2.05"}, {"country": "China", "offered": "yes", "asGo": "$2.05"}, {"country": "Christmas Island", "offered": "yes", "asGo": "$2.05"}, {"country": "Colombia", "offered": "yes", "asGo": "$2.05"}, {"country": "Congo (Dem Rep of)", "offered": "no", "asGo": "$2.05"}, {"country": "Cura\u00e7ao", "offered": "yes", "asGo": "$2.05"}, {"country": "Cyprus", "offered": "yes", "asGo": "$2.05"}, {"country": "Czech Republic", "offered": "yes", "asGo": "$2.05"}, {"country": "Denmark", "offered": "yes", "asGo": "$2.05"}, {"country": "Djibouti", "offered": "no", "asGo": "$2.05"}, {"country": "Egypt", "offered": "yes", "asGo": "$2.05"}, {"country": "El Salvador", "offered": "yes", "asGo": "$2.05"}, {"country": "England", "offered": "yes", "asGo": "$2.05"}, {"country": "Finland", "offered": "yes", "asGo": "$2.05"}, {"country": "France", "offered": "yes", "asGo": "$2.05"}, {"country": "French Guiana", "offered": "yes", "asGo": "$2.05"}, {"country": "French Polynesia", "offered": "no", "asGo": "$2.05"}, {"country": "Gabon", "offered": "no", "asGo": "$2.05"}, {"country": "Germany", "offered": "yes", "asGo": "$2.05"}, {"country": "Ghana", "offered": "no", "asGo": "$2.05"}, {"country": "Gibraltar", "offered": "yes", "asGo": "$2.05"}, {"country": "Greece", "offered": "yes", "asGo": "$2.05"}, {"country": "Guinea", "offered": "no", "asGo": "$2.05"}, {"country": "Guyana", "offered": "yes", "asGo": "$2.05"}, {"country": "Haiti", "offered": "yes", "asGo": "$2.05"}, {"country": "Iraq", "offered": "no", "asGo": "$2.05"}, {"country": "Ireland", "offered": "yes", "asGo": "$2.05"}, {"country": "Ireland, Northern", "offered": "yes", "asGo": "$2.05"}, {"country": "Jersey", "offered": "yes", "asGo": "$2.05"}, {"country": "Jordan", "offered": "no", "asGo": "$2.05"}, {"country": "Jost Van Dyke", "offered": "no", "asGo": "$2.05"}, {"country": "Kazakhstan", "offered": "yes", "asGo": "$2.05"}, {"country": "Kenya", "offered": "no", "asGo": "$2.05"}, {"country": "Laos", "offered": "no", "asGo": "$2.05"}, {"country": "Latvia", "offered": "yes", "asGo": "$2.05"}, {"country": "Lithuania", "offered": "yes", "asGo": "$2.05"}, {"country": "Luxembourg", "offered": "yes", "asGo": "$2.05"}, {"country": "Macao", "offered": "yes", "asGo": "$2.05"}, {"country": "Macedonia", "offered": "yes", "asGo": "$2.05"}, {"country": "Madagascar", "offered": "no", "asGo": "$2.05"}, {"country": "Malta", "offered": "yes", "asGo": "$2.05"}, {"country": "Marie Galante", "offered": "no", "asGo": "$2.05"}, {"country": "Martinique", "offered": "yes", "asGo": "$2.05"}, {"country": "Mauritania", "offered": "no", "asGo": "$2.05"}, {"country": "Mongolia", "offered": "no", "asGo": "$2.05"}, {"country": "Montenegro", "offered": "yes", "asGo": "$2.05"}, {"country": "Montserrat", "offered": "yes", "asGo": "$2.05"}, {"country": "Morocco", "offered": "no", "asGo": "$2.05"}, {"country": "Mozambique", "offered": "no", "asGo": "$2.05"}, {"country": "Netherlands Antilles", "offered": "yes", "asGo": "$2.05"}, {"country": "New Caledonia", "offered": "no", "asGo": "$2.05"}, {"country": "New Zealand", "offered": "yes", "asGo": "$2.05"}, {"country": "Nicaragua", "offered": "yes", "asGo": "$2.05"}, {"country": "Niger", "offered": "no", "asGo": "$2.05"}, {"country": "Palestine", "offered": "yes", "asGo": "$2.05"}, {"country": "Panama", "offered": "yes", "asGo": "$2.05"}, {"country": "Papua New Guinea", "offered": "yes", "asGo": "$2.05"}, {"country": "Paradise Island", "offered": "yes", "asGo": "$2.05"}, {"country": "Qatar", "offered": "no", "asGo": "$2.05"}, {"country": "Reunion", "offered": "yes", "asGo": "$2.05"}, {"country": "Romania", "offered": "yes", "asGo": "$2.05"}, {"country": "Russia", "offered": "yes", "asGo": "$2.05"}, {"country": "Saudi Arabia", "offered": "no", "asGo": "$2.05"}, {"country": "Scotland", "offered": "yes", "asGo": "$2.05"}, {"country": "Senegal", "offered": "no", "asGo": "$2.05"}, {"country": "Serbia", "offered": "yes", "asGo": "$2.05"}, {"country": "South Africa", "offered": "yes", "asGo": "$2.05"}, {"country": "South Sudan", "offered": "no", "asGo": "$2.05"}, {"country": "Spain", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Maarten", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Martin", "offered": "yes", "asGo": "$2.05"}, {"country": "St. Thomas", "offered": "yes", "asGo": "Domestic"}, {"country": "St. Vincent & Grenadines", "offered": "yes", "asGo": "$2.05"}, {"country": "Syria", "offered": "no", "asGo": "$2.05"}, {"country": "Taiwan", "offered": "yes", "asGo": "$2.05"}, {"country": "Tajikistan", "offered": "no", "asGo": "$2.05"}, {"country": "Tanzania", "offered": "no", "asGo": "$2.05"}, {"country": "Thailand", "offered": "yes", "asGo": "$2.05"}, {"country": "Turkey", "offered": "yes", "asGo": "$2.05"}, {"country": "Turkmenistan", "offered": "no", "asGo": "$2.05"}, {"country": "Turks and Caicos Islands", "offered": "yes", "asGo": "$2.05"}, {"country": "Uganda", "offered": "no", "asGo": "$2.05"}, {"country": "Ukraine", "offered": "yes", "asGo": "$2.05"}, {"country": "Vatican City", "offered": "yes", "asGo": "$2.05"}, {"country": "Venezuela", "offered": "yes", "asGo": "$2.05"}, {"country": "Vietnam", "offered": "no", "asGo": "$2.05"}, {"country": "Virgin Gorda", "offered": "yes", "asGo": "$2.05"}, {"country": "Virgin Islands, British", "offered": "yes", "asGo": "$2.05"}];
 
-var accepted = [{"country": "Afghanistan", "offered": "no"}, {"country": "Aland Islands", "offered": "yes"}, {"country": "Albania", "offered": "yes"}, {"country": "Algeria", "offered": "no"}, {"country": "Andorra", "offered": "yes"}, {"country": "Angola", "offered": "no"}, {"country": "Anguilla", "offered": "yes"}, {"country": "Antigua", "offered": "yes"}, {"country": "Argentina", "offered": "yes"}, {"country": "Armenia", "offered": "yes"}, {"country": "Aruba", "offered": "yes"}, {"country": "Australia", "offered": "yes"}, {"country": "Austria", "offered": "yes"}, {"country": "Azerbaijan", "offered": "yes"}, {"country": "Bahamas", "offered": "yes"}, {"country": "Bahrain", "offered": "no"}, {"country": "Bangladesh", "offered": "yes"}, {"country": "Barbados", "offered": "yes"}, {"country": "Barbuda", "offered": "yes"}, {"country": "Belarus", "offered": "yes"}, {"country": "Belgium", "offered": "yes"}, {"country": "Belize", "offered": "yes"}, {"country": "Benin", "offered": "no"}, {"country": "Bermuda", "offered": "yes"}, {"country": "Bhutan", "offered": "no"}, {"country": "Bolivia", "offered": "yes"}, {"country": "Bonaire", "offered": "yes"}, {"country": "Bosnia and Herzegovina", "offered": "yes"}, {"country": "Botswana", "offered": "no"}, {"country": "Brazil", "offered": "yes"}, {"country": "Brunei", "offered": "no"}, {"country": "Bulgaria", "offered": "yes"}, {"country": "Burkina Faso", "offered": "no"}, {"country": "Cambodia", "offered": "no"}, {"country": "Cameroon", "offered": "no"}, {"country": "Canada", "offered": "yes"}, {"country": "Cape Verde Islands", "offered": "no"}, {"country": "Cayman Islands", "offered": "yes"}, {"country": "Central African Republic", "offered": "no"}, {"country": "Chad", "offered": "no"}, {"country": "Chile", "offered": "yes"}, {"country": "China", "offered": "yes"}, {"country": "Christmas Island", "offered": "yes"}, {"country": "Colombia", "offered": "yes"}, {"country": "Democratic Republic of the Congo", "offered": "no"}, {"country": "Republic of the Congo", "offered": "no"}, {"country": "Cook Islands", "offered": "no"}, {"country": "Costa Rica", "offered": "yes"}, {"country": "Croatia", "offered": "yes"}, {"country": "Cuba", "offered": "no"}, {"country": "Cura\u00e7ao", "offered": "yes"}, {"country": "Cyprus", "offered": "yes"}, {"country": "Czech Republic", "offered": "yes"}, {"country": "Denmark", "offered": "yes"}, {"country": "Djibouti", "offered": "no"}, {"country": "Dominica", "offered": "yes"}, {"country": "Dominican Republic", "offered": "yes"}, {"country": "East Timor", "offered": "no"}, {"country": "Easter Island", "offered": "yes"}, {"country": "Ecuador", "offered": "yes"}, {"country": "Egypt", "offered": "yes"}, {"country": "El Salvador", "offered": "yes"}, {"country": "England", "offered": "yes"}, {"country": "Estonia", "offered": "yes"}, {"country": "Faroe Islands", "offered": "yes"}, {"country": "Fiji", "offered": "no"}, {"country": "Finland", "offered": "yes"}, {"country": "France", "offered": "yes"}, {"country": "French Guiana", "offered": "yes"}, {"country": "French Polynesia", "offered": "no"}, {"country": "Gabon", "offered": "no"}, {"country": "Gambia", "offered": "no"}, {"country": "Georgia", "offered": "yes"}, {"country": "Germany", "offered": "yes"}, {"country": "Ghana", "offered": "no"}, {"country": "Gibraltar", "offered": "yes"}, {"country": "Greece", "offered": "yes"}, {"country": "Greenland", "offered": "yes"}, {"country": "Grenada", "offered": "yes"}, {"country": "Guadeloupe", "offered": "yes"}, {"country": "Guam", "offered": "yes"}, {"country": "Guatemala", "offered": "yes"}, {"country": "Guernsey", "offered": "yes"}, {"country": "Guinea Bissau", "offered": "no"}, {"country": "Guyana", "offered": "yes"}, {"country": "Haiti", "offered": "yes"}, {"country": "Honduras", "offered": "yes"}, {"country": "Hong Kong", "offered": "yes"}, {"country": "Hungary", "offered": "yes"}, {"country": "Iceland", "offered": "yes"}, {"country": "India", "offered": "yes"}, {"country": "Indonesia", "offered": "yes"}, {"country": "Iraq", "offered": "no"}, {"country": "Ireland", "offered": "yes"}, {"country": "Ireland, Northern", "offered": "yes"}, {"country": "Isle of Man", "offered": "yes"}, {"country": "Israel", "offered": "yes"}, {"country": "Italy", "offered": "yes"}, {"country": "Ivory Coast", "offered": "no"}, {"country": "Jamaica", "offered": "yes"}, {"country": "Japan", "offered": "yes"}, {"country": "Jersey", "offered": "yes"}, {"country": "Jordan", "offered": "no"}, {"country": "Jost Van Dyke", "offered": "no"}, {"country": "Kazakhstan", "offered": "yes"}, {"country": "Kenya", "offered": "no"}, {"country": "South Korea", "offered": "yes"}, {"country": "Kosovo", "offered": "no"}, {"country": "Kuwait", "offered": "no"}, {"country": "Kyrgyzstan", "offered": "yes"}, {"country": "Laos", "offered": "no"}, {"country": "Latvia", "offered": "yes"}, {"country": "Lebanon", "offered": "no"}, {"country": "Lesotho", "offered": "no"}, {"country": "Liberia", "offered": "no"}, {"country": "Libya", "offered": "no"}, {"country": "Liechtenstein", "offered": "yes"}, {"country": "Lithuania", "offered": "yes"}, {"country": "Luxembourg", "offered": "yes"}, {"country": "Macao", "offered": "yes"}, {"country": "Macedonia", "offered": "yes"}, {"country": "Madagascar", "offered": "no"}, {"country": "Madeira and Azores", "offered": "yes"}, {"country": "Malawi", "offered": "no"}, {"country": "Malaysia", "offered": "yes"}, {"country": "Maldives", "offered": "yes"}, {"country": "Mali", "offered": "no"}, {"country": "Malta", "offered": "yes"}, {"country": "Marie Galante", "offered": "no"}, {"country": "Martinique", "offered": "yes"}, {"country": "Mauritania", "offered": "no"}, {"country": "Mauritius", "offered": "no"}, {"country": "Mayotte Island", "offered": "yes"}, {"country": "Mexico", "offered": "yes"}, {"country": "Moldova", "offered": "yes"}, {"country": "Monaco", "offered": "yes"}, {"country": "Mongolia", "offered": "no"}, {"country": "Montenegro", "offered": "yes"}, {"country": "Montserrat", "offered": "yes"}, {"country": "Morocco", "offered": "no"}, {"country": "Mozambique", "offered": "no"}, {"country": "Myanmar", "offered": "yes"}, {"country": "Namibia", "offered": "no"}, {"country": "Nauru", "offered": "no"}, {"country": "Nepal", "offered": "no"}, {"country": "Netherlands", "offered": "yes"}, {"country": "Netherlands Antilles", "offered": "yes"}, {"country": "New Caledonia", "offered": "no"}, {"country": "New Zealand", "offered": "yes"}, {"country": "Nicaragua", "offered": "yes"}, {"country": "Niger", "offered": "no"}, {"country": "Nigeria", "offered": "no"}, {"country": "Norfolk Island", "offered": "no"}, {"country": "Northern Mariana Islands", "offered": "yes"}, {"country": "Norway", "offered": "yes"}, {"country": "Oman", "offered": "no"}, {"country": "Pakistan", "offered": "no"}, {"country": "Palestine", "offered": "yes"}, {"country": "Panama", "offered": "yes"}, {"country": "Papua New Guinea", "offered": "yes"}, {"country": "Paradise Island", "offered": "yes"}, {"country": "Paraguay", "offered": "yes"}, {"country": "Peru", "offered": "yes"}, {"country": "Philippines", "offered": "yes"}, {"country": "Poland", "offered": "yes"}, {"country": "Portugal", "offered": "yes"}, {"country": "Qatar", "offered": "no"}, {"country": "Reunion", "offered": "yes"}, {"country": "Romania", "offered": "yes"}, {"country": "Russia", "offered": "yes"}, {"country": "Rwanda", "offered": "no"}, {"country": "Saba", "offered": "yes"}, {"country": "Saipan", "offered": "yes"}, {"country": "Samoa", "offered": "yes"}, {"country": "San Marino", "offered": "yes"}, {"country": "Saudi Arabia", "offered": "no"}, {"country": "Scotland", "offered": "yes"}, {"country": "Senegal", "offered": "no"}, {"country": "Serbia", "offered": "yes"}, {"country": "Seychelles", "offered": "no"}, {"country": "Sierra Leone", "offered": "no"}, {"country": "Singapore", "offered": "yes"}, {"country": "Slovakia", "offered": "yes"}, {"country": "Slovenia", "offered": "yes"}, {"country": "South Africa", "offered": "yes"}, {"country": "South Sudan", "offered": "no"}, {"country": "Spain", "offered": "yes"}, {"country": "Sri Lanka", "offered": "yes"}, {"country": "St. Barthelemy", "offered": "yes"}, {"country": "St. Eustatius", "offered": "yes"}, {"country": "St. John", "offered": "yes"}, {"country": "St. Kitts and Nevis", "offered": "yes"}, {"country": "St. Lucia", "offered": "yes"}, {"country": "St. Maarten", "offered": "yes"}, {"country": "St. Martin", "offered": "yes"}, {"country": "St. Thomas", "offered": "yes"}, {"country": "St. Vincent & Grenadines", "offered": "yes"}, {"country": "Suriname", "offered": "yes"}, {"country": "Svalbard", "offered": "yes"}, {"country": "Swaziland", "offered": "no"}, {"country": "Sweden", "offered": "yes"}, {"country": "Switzerland", "offered": "yes"}, {"country": "Syria", "offered": "no"}, {"country": "Taiwan", "offered": "yes"}, {"country": "Tajikistan", "offered": "no"}, {"country": "Tanzania", "offered": "no"}, {"country": "Thailand", "offered": "yes"}, {"country": "Togo", "offered": "no"}, {"country": "Tonga Islands", "offered": "yes"}, {"country": "Tortola", "offered": "yes"}, {"country": "Trinidad & Tobago", "offered": "yes"}, {"country": "Tunisia", "offered": "no"}, {"country": "Turkey", "offered": "yes"}, {"country": "Turkmenistan", "offered": "no"}, {"country": "Turks and Caicos Islands", "offered": "yes"}, {"country": "Uganda", "offered": "no"}, {"country": "Ukraine", "offered": "yes"}, {"country": "United Arab Emirates", "offered": "yes"}, {"country": "United Kingdom", "offered": "yes"}, {"country": "Uruguay", "offered": "yes"}, {"country": "Uzbekistan", "offered": "yes"}, {"country": "Vanuatu", "offered": "no"}, {"country": "Vatican City", "offered": "yes"}, {"country": "Venezuela", "offered": "yes"}, {"country": "Vietnam", "offered": "no"}, {"country": "Virgin Gorda", "offered": "yes"}, {"country": "Virgin Islands, British", "offered": "yes"}, {"country": "Virgin Islands, US", "offered": "yes"}, {"country": "Wales", "offered": "yes"}, {"country": "Western Sahara", "offered": "no"}, {"country": "Yemen", "offered": "no"}, {"country": "Zambia", "offered": "no"}, {"country": "Zanzibar", "offered": "no"}, {"country": "Zimbabwe", "offered": "no"}]
+console.log(accepted.length)
+console.log(geojsonFeature.features.length)
 
 
+	
 
-
-		var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+		var mymap = L.map('mapid').setView([51.505, -0.09], 3);
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     	maxZoom: 18,
@@ -291,19 +310,10 @@ var accepted = [{"country": "Afghanistan", "offered": "no"}, {"country": "Aland 
 
 		var popup = L.popup();
 
-		function onMapClick(e) {
-   		popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(mymap);
-		}
-
-		mymap.on('click', onMapClick);
-
 		L.geoJson(geojsonFeature, {style: style}).addTo(mymap);
 
-		console.log(geojsonFeature.features[1].properties.name);
-		console.log(accepted[0]);
+		//console.log(geojsonFeature.features[1].properties.name);
+		//console.log(accepted[0]);
 		var acceptedNames = [];
 		var unacceptedNames = []
 		for(var i = 0; i < accepted.length; i++){
@@ -311,48 +321,133 @@ var accepted = [{"country": "Afghanistan", "offered": "no"}, {"country": "Aland 
 				acceptedNames.push(accepted[i].country);
 			}
 			else if (accepted[i].offered == "no"){
-				unacceptedNames.push(accepted[i].country)
-;			}
+				unacceptedNames.push(accepted[i].country);			
+			}
 		}
 
-		console.log(acceptedNames.length);
+		//append geojsonData
+		for(var i = 0; i < geojsonFeature.features.length; i++){
+			var match = false
+			var name = geojsonFeature.features[i].properties.name;
+			console.log(name);
+			for(var j = 0; j < accepted.length; j++){
+				if(name === accepted[j].country){
+					console.log(name + accepted[j].country);
+					geojsonFeature.features[i].properties.asGo = accepted[j].asGo;
+					geojsonFeature.features[i].properties.offered = accepted[j].offered;
+					match = true;
+				}
+			}
+			if(match == false){
+				geojsonFeature.features[i].properties.asGo = "N/A";
+			}
+		}
+		console.log(geojsonFeature.features[4].properties.asGo);
+		console.log(geojsonFeature.features[4].properties.offered);
+		//console.log(acceptedNames.length);
+		//console.log(geojsonFeature.features[2].properties.asGo);
 
 		for(var i = 0; i < geojsonFeature.features.length; i++){
 			name = geojsonFeature.features[i].properties.name;
-			console.log(name)
 			if(acceptedNames.indexOf(name) != -1){
-				geojsonFeature.features[i].properties.density = 1000;
-				console.log(geojsonFeature.features[i])
+				geojsonFeature.features[i].properties.preferred = "yes";
 			}
 			else if (unacceptedNames.indexOf(name) != -1){
-				geojsonFeature.features[i].properties.density = 201;
+				geojsonFeature.features[i].properties.preferred = "no";
 			}
 		}
 		
 		function getColor(d) {
-    	   return d > 1000 ? '#800026' :
-           d > 500  ? '#008000' :
-           d > 200  ? '#FF0000' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
+           	if(d == "yes"){
+				return '#228B22'
+			}else if (d == "no"){
+				return '#FF0000'
+			} else{
+				return '#FFEDA0'
+			}
 		}
 
 
 		function style(feature) {
     	return {
-        fillColor: getColor(feature.properties.density),
+        fillColor: getColor(feature.properties.preferred),
         weight: 2,
         opacity: 1,
-        color: 'white',
+        color: 'transparent',
         dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 0.2
     	};
 		}
 
-		L.geoJson(geojsonFeature, {style: style}).addTo(mymap);
+		function highlightFeature(e) {
+		    var layer = e.target;
+
+		    layer.setStyle({
+		        weight: 5,
+		        color: '#666',
+		        dashArray: '',
+		        fillOpacity: 0.2
+		    });
+		     info.update(layer.feature.properties);
+		}
+		var info = L.control();
+		function resetHighlight(e) {
+   			geojson.resetStyle(e.target);
+   			info.update();
+		}
+		function zoomToFeature(e) {
+   			 mymap.fitBounds(e.target.getBounds());
+			}
+		function onEachFeature(feature, layer) {
+		    layer.on({
+		        mouseover: highlightFeature,
+		        mouseout: resetHighlight,
+		        click: zoomToFeature
+		    });
+		}
+		var info = L.control();
+		
+info.onAdd = function (mymap) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+info.update = function (props) {
+	var text;
+    this._div.innerHTML = '<h4>Verizon Data Plan</h4>' +  (props ?
+        '<b>' + props.name + '</b>' + "<br>" + " pay as go price: " + props.asGo + '<br>' + getText(props)
+        : 'Hover over a state');
+};
+
+function getText(props){
+	if(props.offered === "yes"  && (props.name !== "Canada" || props.name !== "Mexico")){
+		text = '$25 for 100MB of data' +  '<br/ >' +
+					'$40 for 100 minutes, 100 texts, and 100MB of data '+'<br/ >' +
+					'$45 for 250MB of data '+'<br/ >' +
+					'$85 for 250 minutes, 250 texts, and 250MB of data '+' <br/ >';
+	}else{
+		text = "No global plans are available. Please turn off data roaming and only use the phone for emergencies."
+	}
+	if(props.name !== "Canada" && props.name !== "Mexico"){
+		text+= '</br>' + ' voice: $1.79/min'
+	}else if (props.name === "Canada"  || props.name === "Mexico"){
+		text = '$15 for 100MB of data' +  '<br/ >' +
+				'$25 for 1GB Data, 500 minutes, 500 texts' + '<br/ >';
+		text+= '</br>' + 'voice: $0.99/min';
+	}
+	text+= '</br>' + ' sent SMS : $0.50, MMS = $0.25'
+	+ '</br>' + ' received SMS: $0.05, MMS = $0.25';
+	if(props.name === "United States of America"){
+		text = "domestic rates apply";
+	}
+	return text
+}
+
+info.addTo(mymap);
+		geojson = L.geoJson(geojsonFeature, {
+		    style: style,
+		    onEachFeature: onEachFeature
+		}).addTo(mymap);
 
 	</script>
 </body>
