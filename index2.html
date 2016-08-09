@@ -479,11 +479,16 @@ console.log(geojsonFeature.features.length)
    			info.update();
 		}
 
+		function zoomToFeature(e) {
+   			 mymap.fitBounds(e.target.getBounds());
+			}
+
 		//method offered by leaflet, i just copied off of website
 
 		function onEachFeature(feature, layer) {
 		    layer.on({
-		        dblclick: highlightFeature,
+		        click: highlightFeature,
+		        dblclick: zoomToFeature
 		    });
 		}
 		var info = L.control();
